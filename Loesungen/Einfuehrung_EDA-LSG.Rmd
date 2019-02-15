@@ -1,0 +1,159 @@
+---
+title: "Einführung in die Explorative Datenanalyse: Lösungen"
+author: "Karsten Lübke"
+output: 
+  pdf_document:
+  documentclass: article
+  classoption: a4paper
+    
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+
+
+## Vorbereitungen
+
+Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+
+```{r library, message=FALSE}
+library(mosaic) # Datenanalyse
+library(DT) # Interaktive Tabellen
+library(gapminder) # Gapminder Daten
+```
+
+Analysiert wird der Datensatz `gapminder` (siehe auch `?gapminder`). Dieser enthält u.a. Daten zur Lebenserwartung (`lifeExp`) bei der Geburt für verschiedene Länder über verschiedene Jahre
+
+Diese wird in die aktuelle R Sitzung eingelesen:
+
+```{r data}
+data(gapminder)
+```
+
+Als interaktive Datentabelle
+
+```{r interaktiveTabelle}
+datatable(gapminder)
+```
+
+**Aufgabe:** 
+
+Wie hat sich die Lebenserwartung in Deutschland im Laufe der Jahre entwickelt?
+
+*Lösung:*
+
+```{r}
+gapminder %>%
+  filter(country == "Germany") %>%
+  select(year, lifeExp)
+```
+
+
+## Erste Analysen
+
+Der generelle Aufbau in `mosaic` sieht wie folgt aus:
+
+```{r mosaic, eval=FALSE}
+meine.analye(mein.y ~ mein.x, data = meine.Daten)
+```
+
+**Aufgabe**
+
+Was zeigt die folgende Abbildung?
+ 
+```{r erstesStreudiagramm}
+gf_point(lifeExp ~ year,  col = ~ continent, data = gapminder)
+```
+
+*Lösung:*
+
+Es ist eine steigende Lebenserwartung erkennbar, allerdings ist sie in Afrika geringer.
+
+
+## Untersuchung Lebenserwartung
+
+Für einen Boxplot muss die modellierende Variable (hier: Jahr, `year`) ein Faktor (`factor`) sein:
+
+```{r boxplot}
+gf_boxplot(lifeExp ~ factor(year), data = gapminder)
+```
+
+Für eine getrennte Analyse je Kontinent:
+
+```{r boxplot-facet}
+gf_boxplot(lifeExp ~ factor(year) | continent, data = gapminder)
+```
+
+
+**Aufgabe**
+
+In der obigen Abbildung erkennt man die zeitliche Entwicklung je Kontinent. Was muss geändert werden, um die Verteilung innerhalb der Kontinente je Jahr zu betrachten? Ersetzen Sie die Platzhalter und löschen Sie `eval=FALSE`.
+
+```{r boxplot-facetyear, eval=FALSE}
+gf_boxplot(lifeExp ~ ___ | ___, data = gapminder)
+```
+
+*Lösung:*
+
+```{r boxplot-facetyearLSG}
+gf_boxplot(lifeExp ~ continent | year, data = gapminder)
+```
+
+
+Die entsprechenden Kennzahlen können analog ermittelt werden:
+
+```{r kennzahlen}
+favstats(lifeExp ~ year, data = gapminder)
+```
+
+**Aufgabe**
+
+Vergleichen Sie die Lebenserwartung im Jahr 2007 je Kontinent. Ersetzen Sie die Platzhalter und löschen Sie `eval=FALSE`.
+
+```{r kennzahlen2007, eval=FALSE}
+gapminder2007 <- gapminder %>%
+  filter(___ == 2007)
+
+favstats(lifeExp ~ ___, data = ___)
+```
+
+*Lösung:*
+
+```{r kennzahlen2007LSG}
+gapminder2007 <- gapminder %>%
+  filter(year == 2007)
+
+favstats(lifeExp ~ continent, data = gapminder2007)
+```
+
+*Bonusfrage*: Wie schneidet Deutschland im Vergleich ab? 
+
+```{r deutschland2007}
+gapminder2007 %>%
+  filter(country == "Germany")
+```
+
+Deutschland liegt auch innerhalb von Europa im Jahre 2007 knapp im dritten Quartil (zwischen Median und oberen Quartil).
+
+## Technische Hinweise
+
+```{r session}
+sessionInfo()
+```
+
+Erstellt am:
+
+```{r date, echo=FALSE}
+Sys.Date()
+```
+
+
+
+

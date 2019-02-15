@@ -2,4 +2,4 @@
 
 install.packages(c("mosaic", "lsr", "tinytex", "rmarkdown", 
                    "knitr", "rprojroot", "plotly", "DT", 
-                   "readxl"))
+                   "readxl", "gapminder"))

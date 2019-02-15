@@ -94,7 +94,7 @@ geburten.mean
 
 Also:
 
-```{r}
+```{r Entscheidung}
 case_when(geburten.geb  > geburten.mean ~ "überdurchschnittlich",
           geburten.geb == geburten.mean ~ "durchschnittlich",
           geburten.geb  < geburten.mean ~ "durchschnittlich")
