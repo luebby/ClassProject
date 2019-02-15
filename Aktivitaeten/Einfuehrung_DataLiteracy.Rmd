@@ -1,0 +1,113 @@
+---
+title: "Einführung in die Data-Literacy"
+author: "Karsten Lübke"
+output: slidy_presentation
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+
+
+## Vorbereitungen
+
+Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+
+```{r library, message=FALSE}
+library(mosaic) # Datenanalyse
+library(DT) # Interaktive Tabellen
+library(plotly) # Interaktive Grafiken
+```
+
+Analysiert wird der Datensatz `Births2015` (siehe auch `?Births2015`). Dieser enthält die Anzahl der Geburten in den USA im Jahre 2015.
+
+Diese wird in die aktuelle R Sitzung eingelesen:
+
+```{r data}
+data(Births2015)
+```
+
+## Erste Analysen
+
+Der generelle Aufbau in `mosaic` sieht wie folgt aus:
+
+```{r mosaic, eval=FALSE}
+meine.analye(mein.y ~ mein.x, data = meine.Daten)
+```
+
+**Aufgabe**
+
+Was zeigt die folgende Abbildung?
+ 
+```{r erstesStreudiagramm}
+gf_point(births ~ date, data = Births2015)
+```
+
+**Aufgabe** 
+
+Haben Sie eine Erklärung?
+
+
+## Interaktive Datentabelle
+
+Der Befehl `datatable()` aus dem Paket `DT` stellt die Datentabelle dar:
+
+```{r datatable}
+datatable(Births2015)
+```
+
+**Aufgaben**
+
+- Suchen Sie Ihren Geburtstag. Gab es an diesem Tag viele Geburten? 
+- An welchem Tag gab es am wenigsten Geburten?
+
+## Zweite Analyse
+
+Über die Option `col=~mein.z` können die Punkte farbig markiert werden. 
+
+**Aufgabe**
+
+Ersetzen Sie `____` durch einen geeigneten Variablenamen aus dem Datensatz und löschen Sie die Option `eval=FALSE`.
+
+```{r zweitesStreudiagramm, eval=FALSE}
+gf_point(births ~ date, col = ~____, data = Births2015)
+```
+
+## Interaktive Grafik
+
+Über `%>%` können Ergebnisse weitergegeben werden. Die Funktion `ggplotly()` erzeugt aus einer Grafik eine interaktives.
+
+**Aufgabe**
+
+Ersetzen Sie die Platzhalter und löschen Sie anschließend die Option `eval=FALSE`.
+
+```{r interaktivesStreudiagramm, eval=FALSE}
+gf_point(___ ~ ___, col = ~___, data = Births2015) %>%
+  ggplotly()
+```
+
+**Aufgabe**
+
+Was fällt auf?
+
+## Technische Hinweise
+
+```{r session}
+sessionInfo()
+```
+
+Erstellt am:
+
+```{r date, echo=FALSE}
+Sys.Date()
+```
+
+
+
+
