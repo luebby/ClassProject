@@ -1,0 +1,286 @@
+---
+title: "Einführung in die Inferenz"
+author: "Karsten Lübke"
+output: slidy_presentation
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+
+
+## Vorbereitungen
+
+Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+
+```{r library, message=FALSE}
+library(mosaic) # Datenanalyse
+```
+
+Analysiert wird der Datensatz `Births2015` (siehe auch `?Births2015`). Dieser enthält die Anzahl der Geburten in den USA im Jahre 2015. Das heißt es liegen die Daten der Population/ Grundgesamtheit vor.
+
+```{r data}
+data(Births2015)
+```
+
+
+Verteilung der Geburten, z.B. über ein Histogramm:
+
+
+```{r histogram}
+gf_histogram( ~ births, data = Births2015)
+```
+
+
+**Aufgabe:** 
+
+Wie würden Sie die Verteilung beschreiben?
+
+
+
+## Stichproben
+
+Insgesamt liegt der Mittelwert in der Population bei: $\bar{x}=`r mean(~births, data = Births2015)`$.
+
+Welchen Mittelwert hätten wir, wenn wir nur eine Stichprobe, z.B. von $n=50$ Tagen vorliegen hätten?
+
+```{r sample1}
+mean( ~ births, data = sample(Births2015, size = 50))
+```
+
+Eine andere Stichprobe, ein anderes Ergebnis:
+
+```{r sample2}
+mean( ~ births, data = sample(Births2015, size = 50))
+```
+
+Um auch den Zufall reproduzierbar zu machen sollte der Zufallszahlengenerator über `set.seed()` festgesetzt werden:
+
+```{r sample-rep}
+# Erster Stichprobenmittelwert
+set.seed(1896)
+mean( ~ births, data = sample(Births2015, size = 50))
+# Zweiter Stichprobenmittelwert
+set.seed(1896)
+mean( ~ births, data = sample(Births2015, size = 50))
+```
+
+**Aufgabe:**
+
+Erstellen Sie ein Histogramm der Verteilung der Geburten für eine Stichprobe. Ersetzen Sie den Platzhalter und löschen die Option `eval=FALSE`.
+ 
+```{r VerteilungStipro, eval=FALSE}
+set.seed(1896)
+___( ~ births, data = sample(Births2015, size = 50))
+```
+
+Über `do()*` können Auswertungen wiederholt werden:
+
+```{r do}
+set.seed(1896)
+do(5)* mean( ~ births, data = sample(Births2015, size = 50))
+```
+
+Eine zufällige Stichprobe ergibt auch einen zufälligen Mittelwert.
+
+Die Stichprobenverteilung des Mittelwertes kann simuliert werden:
+
+```{r stiprovtlg}
+set.seed(1896)
+Stiprovtlg <- do(1000)* mean( ~ births, data = sample(Births2015, size = 50))
+```
+
+Visualsiert und ergänzt um den hier bekannten wahren Wert:
+
+```{r vis-stiprovtlg}
+gf_histogram( ~ mean, data = Stiprovtlg) %>%
+  gf_vline(xintercept = mean(~births, data = Births2015))
+```
+
+**Aufgabe:**
+
+Welchen Unterschied sehen Sie in der Verteilung des Mittelwertes der Geburten im Vergleich zur Verteilung der Geburten in der Stichprobe?
+
+Während die Streuung der Beobachtungen in der Population bei:
+
+```{r sd}
+sd( ~ births, data = Births2015)
+```
+
+liegt, liegt die simulierte Streuung des Mittelwertes bei:
+
+```{r}
+sd( ~ mean, data = Stiprovtlg)
+```
+
+Allgemein gilt: $$se=\frac{sd}{\sqrt{n}}$$
+
+**Aufgabe:**
+
+Statt $n=50$ ziehen Sie jetzt eine Stichprobe mit $n=250$. Was ändert sich? Ersetzen Sie den Platzhalter und löschen die Option `eval=FALSE`.
+
+```{r stripo250, eval=FALSE}
+# Simulation
+set.seed(1896)
+Stiprovtlg250 <- do(1000)* mean( ~ births, data = sample(Births2015, size = ___))
+
+# Histogramm
+gf_histogram( ~ mean, data = ___) %>%
+  gf_vline(xintercept = mean(~births, data = Births2015))
+
+# Standardfehler
+sd( ~ mean, data = ___)
+```
+
+## Resampling
+
+Häufig hat man nur einen Datensatz, z.B. aufgrund einer zufälligen Stichprobe. Z.B.
+
+```{r sample}
+set.seed(1896)
+Stipro <- sample(Births2015, size = 150)
+```
+
+Der Mittelwert der Stichprobe
+
+```{r mean-stipro}
+mean( ~ births, data = Stipro)
+```
+
+entspricht i.d.R. nicht dem der Population
+
+```{r mean-gg}
+mean( ~ births, data = Births2015)
+```
+
+Unsicherheit und Variation aufgrund der zufällig vorhandenen Daten.
+
+Dieser Zufall wird durch *Resampling* simuliert:
+
+```{r resample}
+set.seed(1896)
+do(5)* mean( ~ births, data = resample(Stipro))
+```
+
+Die Boostrap-Verteilung entsteht durch wiederholtes resamplen:
+
+```{r boot}
+set.seed(1896)
+Bootvtlg <- do(1000)* mean( ~ births, data = resample(Stipro))
+```
+
+Die Bootstap-Verteilung streut um den Schätzwert der Stichprobe:
+
+```{r boot-dist}
+gf_histogram( ~ mean, data = Bootvtlg) %>%
+  gf_vline(xintercept = mean( ~ births, data = Stipro))
+```
+
+**Aufgabe:** 
+
+Der Befehl `confint()` gibt das Bootstap-Konfidenzintervall aus. Liegt der (hier bekannte) Mittelwert der Population im $95\,\%$-Konfidenzitervall? Ersetzen Sie den Platzhalter und löschen die Option `eval=FALSE`.
+
+```{r ki, eval=FALSE}
+___(Bootvtlg)
+```
+
+Vergleich Bootstrap-Verteilung des Mittelwertes und wahrer Mittelwert:
+
+```{r boot-dist-true}
+gf_histogram( ~ mean, data = Bootvtlg) %>%
+  gf_vline(xintercept = mean( ~ births, data = Births2015), color = "red")
+```
+
+
+## Permutation
+
+Es gibt Unterschiede in der Anzahl der Geburten je Wochentag:
+
+```{r violin}
+gf_violin(births ~ wday, data = Births2015)
+```
+
+Das zeigen auch die Kennzahlen:
+
+```{r favstats}
+favstats(births ~ wday, data = Births2015)
+```
+ 
+ Kann der beobachtete Unterschied der Mittelwerte zwischen Montag (`Mon`) und Dienstag (`Tue`) plausibel durch *Zufall* erklärt werden, wenn annehmen, dass es keinen Unterschied in der Verteilung gibt?
+ 
+Reduktion des Datensatzes:
+
+```{r datapre}
+Births.MonTue <- Births2015 %>%
+  filter(wday == "Mon" | wday == "Tue") %>%
+  droplevels() # andere Tage löschen
+
+mean(births ~ wday, data = Births.MonTue)
+```
+
+Die beobachtete Differenz der Mittelwerte liegt bei:
+
+```{r diffmean}
+diffmean(births ~ wday, data = Births.MonTue)
+```
+
+Also:
+
+$$\bar{x}_{Tue}-\bar{x}_{Mon}=`r mean(births ~ wday, data = Births.MonTue)[2]`-`r mean(births ~ wday, data = Births.MonTue)[1]`=`r diffmean(births ~ wday, data = Births.MonTue)`$$
+
+Der Befehl `shuffle()` permutiert (mischt) die Beobachtungen. Damit wird eine Verteilung simuliert, in der es keinen Unterschied in der Verteilung zwischen den Wochentagen gibt:
+
+```{r shuffle}
+set.seed(1896)
+do(5)* diffmean(births ~ shuffle(wday), data = Births.MonTue)
+```
+
+**Aufgabe:**
+
+Warum sieht man, auch wenn nach Konstruktion kein Mittelwertsuntschied vorliegt, Differenzen der Mittelwerte?
+
+Simulation der Verteilung unter der Nullhypothese, es gibt keinen Unterschied in der Verteilung, d.h. auch:
+
+$$H_0: \mu_{Tue}=\mu_{Mon} \Leftrightarrow \mu_{Tue}-\mu_{Mon}=0$$
+
+```{r Nullvtlg}
+set.seed(1896)
+Nullvtlg <- do(1000)* diffmean(births ~ shuffle(wday), data = Births.MonTue)
+```
+
+Visualisierung:
+
+```{r Nullhist}
+gf_histogram( ~ diffmean, data = Nullvtlg)
+```
+
+**Aufgabe:**
+
+Ergänzen Sie den Plot um eine Linie, die die in der Stichprobe beobachtete Differenz darstellt. Ist dieser Wert ein üblicher Wert, wenn das Modell der Nullhypothese stimmt?  Ersetzen Sie den Platzhalter und löschen die Option `eval=FALSE`.
+
+```{r Visu-p-Wert, eval=FALSE}
+gf_histogram( ~ diffmean, data = Nullvtlg) %>%
+  gf_vline(xintercept = ___)
+```
+
+## Technische Hinweise
+
+```{r session}
+sessionInfo()
+```
+
+Erstellt am:
+
+```{r date, echo=FALSE}
+Sys.Date()
+```
+
+
+
+
