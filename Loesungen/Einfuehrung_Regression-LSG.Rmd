@@ -1,0 +1,256 @@
+---
+title: "Einführung in die Regression: Lösungen"
+author: "Karsten Lübke"
+output: 
+  pdf_document:
+  documentclass: article
+  classoption: a4paper
+  
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+
+
+## Vorbereitungen
+
+Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+
+```{r library, message=FALSE}
+library(mosaic) # Datenanalyse
+```
+
+Analysiert wird der Datensatz `gdp-vs-happiness-clean.csv`. Dieser wurde von dem Internetportal [Our World in Data](https://ourworldindata.org/) von der Seite [https://ourworldindata.org/happiness-and-life-satisfaction#income](https://ourworldindata.org/happiness-and-life-satisfaction#income) heruntergeladen und steht unter der [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de) Lizenz. Der Datensatz wurde für diese Untersuchung bereinigt.
+
+Zur Variablenbeschreibung:
+
+> gpd: GDP per capita, PPP (constant 2011 international $): GDP per capita based on purchasing power parity (PPP). PPP GDP is gross domestic product converted to international dollars using purchasing power parity rates. An international dollar has the same purchasing power over GDP as the U.S. dollar has in the United States. GDP at purchaser's prices is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in constant 2011 international dollars.
+
+> ls: Life satisfaction in Cantril Ladder (World Happiness Report 2018): Average of survey responses to the 'Cantril Ladder' question in the Gallup World Poll. The survey question asks respondents to think of a ladder, with the best possible life for them being a 10, and the worst possible life being a 0. 
+
+<!-- Hinweis: Ggf. Pfad anpassen! -->
+
+```{r data}
+Satisfaction <- read.csv2("../Daten/gdp-vs-happiness-clean.csv")
+```
+
+## Erste Analyse
+
+Ein Streudiagramm mit Wirtschaftsleistung, gemessen in `gdp` und Lebenszufriedenheit, gemessen in `ls` ergibt folgendes Bild:
+
+```{r streu1}
+gf_point(ls ~ gdp, data = Satisfaction)
+```
+
+**Aufgabe:**
+
+Scheint der Zusammenhang linear zu sein? *Tipp:* Ergänzen Sie eine Glättungsline über `gf_smooth()`.
+
+*Lösung:*
+
+```{r streu1-smooth}
+gf_point(ls ~ gdp, data = Satisfaction) %>%
+  gf_smooth()
+```
+
+Der Zusammenhang scheint zwar monoton steigend, aber nicht linear zu sein: zunächst steigt die Lebenszufriedenheit relativ steil mit der Wirtschaftsleistung, danach weniger steil -- in diesen Beobachtungsdaten auf Länderebene.
+
+
+Die Variable `gdp` weißt eine ausgeprägte rechtsschiefe auf:
+
+```{r hist-gdp}
+gf_histogram( ~ gdp, data = Satisfaction)
+```
+
+Da auch nur positive Werte möglich sind, wird diese zunächst logarithmiert ($ln()$):
+
+```{r log}
+Satisfaction <- Satisfaction %>%
+  mutate(log_gdp = log(gdp))
+```
+
+Mit dieser Variable sieht der Zusammenhang insgesamt schon *linearer* aus:
+
+```{r streu2}
+gf_point(ls ~ log_gdp, data = Satisfaction) %>%
+  gf_smooth()
+```
+
+Die beobachtete Lebenszufriedenheit ist höher in Ländern, in denen eine höhere wirtschaftliche Leistung beobachtet wurde.
+
+## Modellierung
+
+Ein lineares Modell, mit der Lebenszufriedenheit als modellierte Variable und dem Logarithmus der wirtschaftlichen Leistung als modellierende Variable -- auf Länderebene $i$ -- sieht wie folgt aus:
+
+$$ls_i=\beta_0 + \beta_1 \cdot ln(gpd_i) + \epsilon_i$$
+
+Kleinste-Qudrate Schätzung der Koeffizienten:
+
+```{r lm1}
+erglm <- lm(ls ~ log_gdp, data = Satisfaction)
+erglm
+```
+
+Also $\hat{\beta}_0=`r coef(erglm)[1]`$ und $\hat{\beta}_1=`r coef(erglm)[2]`$.
+
+**Aufgabe:**
+
+In der Stichprobe: steigt oder fällt der Mittelwert der Lebenszufriedenheit mit der wirtschaftlichen Leistung?
+
+*Lösung:*
+
+Da der geschätzte Koeffizient für die Variable `log_gdp` größer als $0$ ist ($\hat{\beta}_1=`r coef(erglm)[2]`$), wird in der Stichprobe bei einer höhren wirtschaftlichen Leistung im Mittelwert eine höhrere Lebenszufriedenheit beobachtet.
+
+
+Eine genauere Analyse des Modells ergibt:
+
+```{r lm-aus}
+plotModel(erglm)
+summary(erglm)
+```
+
+D.h. im Modell wird `r rsquared(erglm)` der Variation der Lebenszufriedenheit modelliert (Bestimmtheitsmaß $R^2$).
+
+**Aufgabe:**
+
+Wird im Modell mit der nicht-logarithmierten erklärenden Variable `gdp` mehr Variation modelliert? Ersetzen Sie die Platzhalter und löschen Sie `eval=FALSE`.
+
+```{r lmorg, eval=FALSE}
+lm(___ ~ ___, data = Satisfaction) %>%
+  rsquared()
+```
+
+*Lösung:*
+
+```{r lmorgLSG}
+lm(ls ~ gdp, data = Satisfaction) %>%
+  rsquared()
+```
+
+Das $R^2$ ist leicht kleiner.
+
+
+## Inferenz
+
+Auch diese Daten sind eine zufällige Stichprobe, andere, plausible Stichproben hätten ein anderes Ergebnis ergeben:
+
+```{r sample}
+set.seed(1896)
+do(3)* lm(ls ~ log_gdp, data = sample(Satisfaction, size = 100))
+```
+
+Mit Hilfe des Bootstrap kann die Verteilung geschätzt werden. Der Befehl `resample()` simuliert das Ziehen mit Zurücklegen.
+
+```{r bootstrap}
+set.seed(1896)
+Bootvtlg <- do(1000)* lm(ls ~ log_gdp, data = resample(Satisfaction))
+```
+
+**Aufgabe:**
+
+Erstellen Sie ein Histogramm der simulierten Verteilung des geschätzen Koeffizienten für die Variable `log_gdp` und zeichnen Sie eine Linie für den Wert, der gelten würde, wenn es keinen Zusammenhang geben würde. Ersetzen Sie die Platzhalter und löschen Sie `eval=FALSE`.
+
+```{r bootstrap-0, eval=FALSE}
+gf_histogram( ~ log_gdp, data = ___) %>%
+  gf_vline(xintercept = ___)
+```
+
+*Lösung:*
+
+```{r bootstrap-0LSG}
+gf_histogram( ~ log_gdp, data = Bootvtlg) %>%
+  gf_vline(xintercept = 0)
+```
+
+$\beta_1=0$ liegt *nicht* im $95\,\%$-Konfidenzintervall:
+
+```{r confi}
+cdata( ~ log_gdp, data = Bootvtlg)
+```
+
+Unter der Annahme, d.h. Hypothese, dass es keinen (linearen) Zusammenhang gibt ($H_0: \beta_1=0$), kann die erklärende Variable permutiert werden:
+
+Exemplarisches Beispiel:
+
+```{r shuffle}
+set.seed(1896)
+gf_point(ls ~ shuffle(log_gdp), data = Satisfaction)
+```
+
+Für die simulierte Verteilung des Koeffizienten unter der Annahme von $H_0$ gilt dann:
+
+```{r Nullvtlg}
+set.seed(1896)
+Nullvtlg <- do(1000)* lm(ls ~ shuffle(log_gdp), data = Satisfaction)
+gf_histogram( ~ log_gdp, data = Nullvtlg) %>%
+  gf_vline(xintercept = coef(erglm)[2] )
+```
+
+**Aufgabe:**
+
+Ist der in der Stichprobe beobachtete Zusammenhang *signifikant*, d.h. (sehr) unwahrscheinlich, wenn gar keiner vorliegt?
+
+*Lösung:*
+
+Ja. Die kritischen Werte der Verteilung unter $H_0: \beta_1=0$ zum Niveau $\alpha=0.05$ lauten:
+
+```{r kritischeWerte}
+cdata( ~ log_gdp, data = Nullvtlg)
+```
+
+Der Schätzwert $\hat{\beta}_1=`r coef(erglm)[2]`$ ist da nicht enthalten, $H_0$ wird also verworfen.
+
+## Modelldiagnose
+
+Das Streudiagramm der Residuen (`resid()`) gegen die angepassten Werte (`fitted()`) sollte kein Muster zeigen:
+
+```{r, resid}
+gf_point(resid(erglm) ~ fitted(erglm))
+```
+
+Es ist kein Muster erkennbar.
+
+**Aufgabe:** 
+
+Erstellen Sie einen solchen Residualplot für das Modell, in dem `gdp` nicht logarithmiert wurde. Gibt es Auffälligkeiten? Ersetzen Sie die Platzhalter und löschen Sie `eval=FALSE`.
+
+```{r resid2, eval=FALSE}
+erglm2 <- lm(ls ~ ___, data = Satisfaction)
+gf_point(resid(___) ~ fitted(___)) %>%
+  gf_smooth()
+```
+
+*Lösung:*
+
+```{r resid2LSG}
+erglm2 <- lm(ls ~ gdp, data = Satisfaction)
+gf_point(resid(erglm2) ~ fitted(erglm2)) %>%
+  gf_smooth()
+```
+
+Es ist ein klares Muster erkennbar. Dies deutet auf eine Verletzung der Annahme eines linearen Zusammenhanges hin.
+
+
+
+## Technische Hinweise
+
+```{r session}
+sessionInfo()
+```
+
+Erstellt am:
+
+```{r date, echo=FALSE}
+Sys.Date()
+```
+
+
+
+
