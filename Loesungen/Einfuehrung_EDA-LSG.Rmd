@@ -5,7 +5,9 @@ output:
   pdf_document:
   documentclass: article
   classoption: a4paper
-    
+
+always_allow_html: yes
+
 editor_options: 
   chunk_output_type: console
 ---
