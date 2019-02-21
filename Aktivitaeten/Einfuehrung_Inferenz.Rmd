@@ -200,6 +200,8 @@ gf_histogram( ~ mean, data = Bootvtlg) %>%
 
 ## Permutation
 
+Gibt es bei den Geburten einen *Montagsknick*?
+
 Es gibt Unterschiede in der Anzahl der Geburten je Wochentag:
 
 ```{r violin}
@@ -213,6 +215,8 @@ favstats(births ~ wday, data = Births2015)
 ```
  
 Kann der beobachtete Unterschied der Mittelwerte zwischen Montag (`Mon`) und Dienstag (`Tue`) plausibel durch *Zufall* erklärt werden, wenn wir annehmen, dass es keinen Unterschied in der Verteilung gibt?
+
+**Achtung**: Die zu pürfenden Hypothesen müssen **vor** der Datenanalyse feststehen!
  
 Reduktion des Datensatzes:
 
