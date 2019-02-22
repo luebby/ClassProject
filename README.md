@@ -13,3 +13,5 @@ Vor der ersten Nutzung im Ordner `Setup` das Skript `Pakete-installieren.R` auf�
 Um `pdf`s zu erzeugen muss eine LaTeX-Installation vorhanden sein. Sollte dies *nicht* der Fall sein bitte außerdem das Skript `tinytex-installieren.R` ausführen.
 
 
+Melden Sie Fehler oder Unklarheiten über [https://github.com/luebby/ClassProject/issues](https://github.com/luebby/ClassProject/issues).
+
