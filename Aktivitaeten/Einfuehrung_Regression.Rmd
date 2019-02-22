@@ -134,7 +134,7 @@ gf_histogram( ~ log_gdp, data = ___) %>%
   gf_vline(xintercept = ___)
 ```
 
-Unter der Annahme, d.h. Hypothese, dass es keinen (linearen) Zusammenhang gibt ($H_0: \beta_1=0$), kann die erklärende Variable permutiert werden:
+Unter der Annahme, d.h. Hypothese, dass es keinen Zusammenhang gibt, die Variablen unabhängig sind (und damit auch $H_0: \beta_1=0$), kann die erklärende Variable permutiert werden:
 
 Exemplarisches Beispiel:
 
@@ -143,7 +143,7 @@ set.seed(1896)
 gf_point(ls ~ shuffle(log_gdp), data = Satisfaction)
 ```
 
-Für die simulierte Verteilung des Koeffizienten unter der Annahme von $H_0$ gilt dann:
+Für die simulierte Verteilung des Koeffizienten unter der Annahme der Unabhängigkeit gilt dann:
 
 ```{r Nullvtlg}
 set.seed(1896)
