@@ -10,14 +10,14 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`.  -->
 
 
 ## Vorbereitungen
 
-Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+Zunächst müssen die Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
 
-<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk". -->
 
 ```{r library, message=FALSE}
 library(mosaic) # Datenanalyse

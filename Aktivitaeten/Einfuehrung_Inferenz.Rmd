@@ -10,20 +10,20 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`. -->
 
 
 ## Vorbereitungen
 
-Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+Zunächst müssen die Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
 
-<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk". -->
 
 ```{r library, message=FALSE}
 library(mosaic) # Datenanalyse
 ```
 
-Analysiert wird der Datensatz `Births2015` (siehe auch `?Births2015`). Dieser enthält die Anzahl der Geburten in den USA im Jahre 2015. Das heißt es liegen die Daten der Population/ Grundgesamtheit vor.
+Analysiert wird der Datensatz `Births2015` (siehe auch `?Births2015`). Dieser enthält die Anzahl der Geburten in den USA im Jahre 2015. Das heißt, es liegen die Daten der Population/ Grundgesamtheit vor.
 
 ```{r data}
 data(Births2015)
@@ -216,7 +216,7 @@ favstats(births ~ wday, data = Births2015)
  
 Kann der beobachtete Unterschied der Mittelwerte zwischen Montag (`Mon`) und Dienstag (`Tue`) plausibel durch *Zufall* erklärt werden, wenn wir annehmen, dass es keinen Unterschied in der Verteilung gibt?
 
-**Achtung**: Die zu pürfenden Hypothesen müssen **vor** der Datenanalyse feststehen!
+**Achtung**: Die zu prüfenden Hypothesen müssen **vor** der Datenanalyse feststehen!
  
 Reduktion des Datensatzes:
 

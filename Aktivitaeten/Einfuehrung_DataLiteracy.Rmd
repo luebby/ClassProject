@@ -10,14 +10,14 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`.  -->
 
 
 ## Vorbereitungen
 
-Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+Zunächst müssen die Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
 
-<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk". -->
 
 ```{r library, message=FALSE}
 library(mosaic) # Datenanalyse
@@ -69,7 +69,7 @@ datatable(Births2015)
 
 ## Zweite Analyse
 
-Über die Option `col=~mein.z` können die Punkte farbig markiert werden. 
+Über die Option `col= ~mein.z` können die Punkte farbig markiert werden. 
 
 **Aufgabe**
 
@@ -81,7 +81,7 @@ gf_point(births ~ date, col = ~____, data = Births2015)
 
 ## Interaktive Grafik
 
-Über `%>%` können Ergebnisse weitergegeben werden. Die Funktion `ggplotly()` erzeugt aus einer Grafik eine interaktives.
+Über `%>%` können Ergebnisse weitergegeben werden. Die Funktion `ggplotly()` erzeugt aus einer Grafik eine interaktive.
 
 **Aufgabe**
 

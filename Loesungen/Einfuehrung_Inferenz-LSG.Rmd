@@ -14,20 +14,20 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`.  -->
 
 
 ## Vorbereitungen
 
-Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+Zunächst müssen die Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
 
-<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk". -->
 
 ```{r library, message=FALSE}
 library(mosaic) # Datenanalyse
 ```
 
-Analysiert wird der Datensatz `Births2015` (siehe auch `?Births2015`). Dieser enthält die Anzahl der Geburten in den USA im Jahre 2015. Das heißt es liegen die Daten der Population/ Grundgesamtheit vor.
+Analysiert wird der Datensatz `Births2015` (siehe auch `?Births2015`). Dieser enthält die Anzahl der Geburten in den USA im Jahre 2015. Das heißt, es liegen die Daten der Population/ Grundgesamtheit vor.
 
 ```{r data}
 data(Births2015)
@@ -48,7 +48,7 @@ Wie würden Sie die Verteilung beschreiben?
 
 *Lösung:*
 
-Sie ist mindestens bi-modal -- evt. sogar multi-modal. Ein Gipfel ist bei ca. $12.000$, der kleinere, mit weniger Werten bei ca $8.000$. (Wochentage!)
+Sie ist mindestens bi-modal -- evt. sogar multi-modal. Ein Gipfel ist bei ca. $12.000$, der kleinere, mit weniger Werten bei ca. $8.000$. (Wochentage!)
 
 ## Stichproben
 
@@ -93,7 +93,7 @@ set.seed(1896)
 gf_histogram( ~ births, data = sample(Births2015, size = 50))
 ```
 
-Die bi-modalität findet sich auch in der Stichprobe wieder.
+Die Bi-Modalität findet sich auch in der Stichprobe wieder.
 
 Über `do()*` können Auswertungen wiederholt werden:
 
@@ -124,7 +124,7 @@ Welchen Unterschied sehen Sie in der Verteilung des Mittelwertes der Geburten im
 
 *Lösung:*
 
-Anders als die Verteilung der Geburten selber ist die Stichprobenverteilung des Mittelwertes annährend symmetrisch, normalverteilt.
+Anders als die Verteilung der Geburten selber ist die Stichprobenverteilung des Mittelwertes annähernd symmetrisch, normalverteilt.
 
 Während die Streuung der Beobachtungen in der Population bei:
 
@@ -172,7 +172,7 @@ gf_histogram( ~ mean, data = Stiprovtlg250) %>%
 sd( ~ mean, data = Stiprovtlg250)
 ```
 
-Bei einem größeren Stichprobenumfang sinkt die Streuung des Mittelwertes ($se_{250}=`r sd( ~ mean, data = Stiprovtlg250)`$ im Verglech zu $se_{50}=`r sd( ~ mean, data = Stiprovtlg)`$), *nicht* die der Beobachtungen Stichprobe:
+Bei einem größeren Stichprobenumfang sinkt die Streuung des Mittelwertes ($se_{250}=`r sd( ~ mean, data = Stiprovtlg250)`$ im Verglech zu $se_{50}=`r sd( ~ mean, data = Stiprovtlg)`$), *nicht* die der Beobachtungen in der Stichprobe:
 
 ```{r sd250}
 set.seed(1896)
@@ -266,7 +266,7 @@ favstats(births ~ wday, data = Births2015)
  
 Kann der beobachtete Unterschied der Mittelwerte zwischen Montag (`Mon`) und Dienstag (`Tue`) plausibel durch *Zufall* erklärt werden, wenn wir annehmen, dass es keinen Unterschied in der Verteilung gibt?
  
-**Achtung**: Die zu pürfenden Hypothesen müssen **vor** der Datenanalyse feststehen! 
+**Achtung**: Die zu prüfenden Hypothesen müssen **vor** der Datenanalyse feststehen! 
 
 Reduktion des Datensatzes:
 
@@ -301,7 +301,7 @@ Warum sieht man, auch wenn nach Konstruktion kein Mittelwertsuntschied vorliegt,
 
 *Lösung:* 
 
-Da es aufgrund von Variabliltät, auch wenn $H_0$ stimmt, zu Unterschieden kommt. p-Wert von co. beantworten die Frage: wie wahrscheinlich ist eine mindestens so große Abweichung wie die beobachtete, wenn die Nullhypothese stimmt. 
+Da es aufgrund von Variabilität, auch wenn $H_0$ stimmt, zu Unterschieden kommt. p-Wert von co. beantworten die Frage: Wie wahrscheinlich ist eine mindestens so große Abweichung wie die beobachtete, wenn die Nullhypothese stimmt. 
 
 Simulation der Verteilung unter der Nullhypothese, es gibt keinen Unterschied in der Verteilung, d.h. auch:
 
@@ -334,7 +334,7 @@ gf_histogram( ~ diffmean, data = Nullvtlg) %>%
   gf_vline(xintercept = diffmean(births ~ wday, data = Births.MonTue))
 ```
 
-Die beobachtete Differenz, kommt in der simulierten Permutations-Verteilung der Differenzen, d.h. der Verteilung, wenn die vorliegen würde, wenn die Nullhypothese stimmen würde, nicht vor. Der vorliegende Wert ist unter diesem Modell daher nicht plausibel -- und dies nährt Zweifel an der Gültigkeit der Nullhypothese.
+Die beobachtete Differenz, kommt in der simulierten Permutations-Verteilung der Differenzen, d.h. der Verteilung, die vorliegen würde, wenn die Nullhypothese stimmen würde, nicht vor. Der vorliegende Wert ist unter diesem Modell daher nicht plausibel -- und dies nährt Zweifel an der Gültigkeit der Nullhypothese.
 
 Mit einem p-Wert
 

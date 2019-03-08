@@ -10,14 +10,14 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`.  -->
 
 
 ## Vorbereitungen
 
-Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+Zunächst müssen die Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
 
-<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk". -->
 
 ```{r library, message=FALSE}
 library(mosaic) # Datenanalyse
@@ -39,7 +39,7 @@ Satisfaction <- read.csv2("../Daten/gdp-vs-happiness-clean.csv")
 
 ## Erste Analyse
 
-Ein Streudiagramm mit Wirtschaftsleistung, gemessen in `gdp` und Lebenszufriedenheit, gemessen in `ls` ergibt folgendes Bild:
+Ein Streudiagramm mit Wirtschaftsleistung, gemessen in `gdp`, und Lebenszufriedenheit, gemessen in `ls`, ergibt folgendes Bild:
 
 ```{r streu1}
 gf_point(ls ~ gdp, data = Satisfaction)
@@ -50,7 +50,7 @@ gf_point(ls ~ gdp, data = Satisfaction)
 Scheint der Zusammenhang linear zu sein? *Tipp:* Ergänzen Sie eine Glättungsline über `gf_smooth()`.
 
 
-Die Variable `gdp` weißt eine ausgeprägte rechtsschiefe auf:
+Die Variable `gdp` weist eine ausgeprägte Rechtsschiefe auf:
 
 ```{r hist-gdp}
 gf_histogram( ~ gdp, data = Satisfaction)
@@ -98,7 +98,7 @@ plotModel(erglm)
 summary(erglm)
 ```
 
-D.h. im Modell wird `r rsquared(erglm)` der Variation der Lebenszufriedenheit modelliert (Bestimmtheitsmaß $R^2$).
+D.h., im Modell wird `r rsquared(erglm)` der Variation der Lebenszufriedenheit modelliert (Bestimmtheitsmaß $R^2$).
 
 **Aufgabe:**
 
@@ -154,7 +154,7 @@ gf_histogram( ~ log_gdp, data = Nullvtlg) %>%
 
 **Aufgabe:**
 
-Ist der in der Stichprobe beobachtete Zusammenhang *signifikant*, d.h. (sehr) unwahrscheinlich, wenn gar keiner vorliegt?
+Ist der in der Stichprobe beobachtete Zusammenhang *signifikant*, d.h., (sehr) unwahrscheinlich, wenn gar keiner vorliegt?
 
 ## Modelldiagnose
 

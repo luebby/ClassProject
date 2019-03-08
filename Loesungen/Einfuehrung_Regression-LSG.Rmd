@@ -14,14 +14,14 @@ editor_options:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`  -->
+<!-- Hinweis: Das Dokument wird erzeugt durch Klick auf `Knit`.  -->
 
 
 ## Vorbereitungen
 
-Zunächst müssen Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
+Zunächst müssen die Pakete (nachdem sie einmalig über `install.packages()` installiert wurden) geladen werden:
 
-<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk" -->
+<!-- Hinweis: Ein *Chunk* wird an die `Console` geschickt über den grünen Pfeil rechts oben: "Run Current Chunk". -->
 
 ```{r library, message=FALSE}
 library(mosaic) # Datenanalyse
@@ -43,7 +43,7 @@ Satisfaction <- read.csv2("../Daten/gdp-vs-happiness-clean.csv")
 
 ## Erste Analyse
 
-Ein Streudiagramm mit Wirtschaftsleistung, gemessen in `gdp` und Lebenszufriedenheit, gemessen in `ls` ergibt folgendes Bild:
+Ein Streudiagramm mit Wirtschaftsleistung, gemessen in `gdp`, und Lebenszufriedenheit, gemessen in `ls`, ergibt folgendes Bild:
 
 ```{r streu1}
 gf_point(ls ~ gdp, data = Satisfaction)
@@ -63,7 +63,7 @@ gf_point(ls ~ gdp, data = Satisfaction) %>%
 Der Zusammenhang scheint zwar monoton steigend, aber nicht linear zu sein: zunächst steigt die Lebenszufriedenheit relativ steil mit der Wirtschaftsleistung, danach weniger steil -- in diesen Beobachtungsdaten auf Länderebene.
 
 
-Die Variable `gdp` weißt eine ausgeprägte rechtsschiefe auf:
+Die Variable `gdp` weist eine ausgeprägte Rechtsschiefe auf:
 
 ```{r hist-gdp}
 gf_histogram( ~ gdp, data = Satisfaction)
@@ -106,7 +106,7 @@ In der Stichprobe: steigt oder fällt der Mittelwert der Lebenszufriedenheit mit
 
 *Lösung:*
 
-Da der geschätzte Koeffizient für die Variable `log_gdp` größer als $0$ ist ($\hat{\beta}_1=`r coef(erglm)[2]`$), wird in der Stichprobe bei einer höhren wirtschaftlichen Leistung im Mittelwert eine höhrere Lebenszufriedenheit beobachtet.
+Da der geschätzte Koeffizient für die Variable `log_gdp` größer als $0$ ist ($\hat{\beta}_1=`r coef(erglm)[2]`$), wird in der Stichprobe bei einer höheren wirtschaftlichen Leistung im Mittelwert eine höhere Lebenszufriedenheit beobachtet.
 
 
 Eine genauere Analyse des Modells ergibt:
@@ -116,7 +116,7 @@ plotModel(erglm)
 summary(erglm)
 ```
 
-D.h. im Modell wird `r rsquared(erglm)` der Variation der Lebenszufriedenheit modelliert (Bestimmtheitsmaß $R^2$).
+D.h., im Modell wird `r rsquared(erglm)` der Variation der Lebenszufriedenheit modelliert (Bestimmtheitsmaß $R^2$).
 
 **Aufgabe:**
 
@@ -195,7 +195,7 @@ gf_histogram( ~ log_gdp, data = Nullvtlg) %>%
 
 **Aufgabe:**
 
-Ist der in der Stichprobe beobachtete Zusammenhang *signifikant*, d.h. (sehr) unwahrscheinlich, wenn gar keiner vorliegt?
+Ist der in der Stichprobe beobachtete Zusammenhang *signifikant*, d.h., (sehr) unwahrscheinlich, wenn gar keiner vorliegt?
 
 *Lösung:*
 
